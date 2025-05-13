@@ -38,7 +38,7 @@ public class StringHandler implements CommandHandler {
         if (args.length < 1) {
             return "-ERR wrong number of arguments for 'SET'\r\n";
         }
-        database.setString(key, args[1]);
+        database.setString(key, args[2]);
         return "+OK\r\n";
     }
 
