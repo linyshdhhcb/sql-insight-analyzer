@@ -11,24 +11,28 @@ import java.nio.channels.*;
 import java.util.Iterator;
 
 public class Reactor {
-    private Selector selector;
-    private final Database storage;
+    private final Selector selector;
+    private final CommandExecutor executor;
 
-    public Reactor(Database storage) { // 新增构造函数 ✅
-        this.storage = storage;
+    // 构造方法，接收 CommandExecutor
+    public Reactor(CommandExecutor executor) throws IOException {
+        this.selector = Selector.open();
+        this.executor = executor;
     }
 
+    // 启动 Reactor，监听客户端连接
     public void start(int port) throws IOException {
-        selector = Selector.open();
-        ServerSocketChannel serverSocket = ServerSocketChannel.open();
-        serverSocket.bind(new InetSocketAddress(port));
-        serverSocket.configureBlocking(false);
-        serverSocket.register(selector, SelectionKey.OP_ACCEPT);
+        // 打开服务器的 SocketChannel
+        ServerSocketChannel serverSocketChannel = ServerSocketChannel.open();
+        serverSocketChannel.bind(new InetSocketAddress(port));
+        serverSocketChannel.configureBlocking(false);  // 非阻塞模式
+        serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);  // 注册到 selector
 
-        System.out.println("LiteKV-DB 已启动，监听端口：" + port);
+        System.out.println("LiteKV-DB 正在启动，监听端口：" + port);
 
+        // 事件循环
         while (true) {
-            selector.select();
+            selector.select();  // 阻塞，等待事件
             Iterator<SelectionKey> keys = selector.selectedKeys().iterator();
 
             while (keys.hasNext()) {
@@ -46,32 +50,37 @@ public class Reactor {
         }
     }
 
+    // 接受客户端连接
     private void accept(SelectionKey key) throws IOException {
         ServerSocketChannel serverChannel = (ServerSocketChannel) key.channel();
         SocketChannel clientChannel = serverChannel.accept();
         clientChannel.configureBlocking(false);
-        clientChannel.register(selector, SelectionKey.OP_READ);
+        clientChannel.register(selector, SelectionKey.OP_READ);  // 注册为可读事件
     }
 
+    // 读取客户端数据，并处理命令
     private void read(SelectionKey key) throws IOException {
         SocketChannel clientChannel = (SocketChannel) key.channel();
         ByteBuffer buffer = ByteBuffer.allocate(1024);
         int read = clientChannel.read(buffer);
 
         if (read == -1) {
-            clientChannel.close();
+            clientChannel.close();  // 客户端断开连接
             return;
         }
 
-        buffer.flip();
+        buffer.flip();  // 切换到读取模式
         byte[] bytes = new byte[buffer.remaining()];
         buffer.get(bytes);
+        // 获取请求的字符串
         String request = new String(bytes);
 
+        // 解析命令
         String[] args = RespDecoder.decode(request);
         if (args != null && args.length > 0) {
-            // 使用注入的 storage
-            String response = new CommandExecutor(this.storage).execute(args);
+            // 使用 CommandExecutor 执行命令
+            String response = executor.executeCommand(args[0], args[1], args);
+            // 将结果写回客户端
             clientChannel.write(ByteBuffer.wrap(response.getBytes()));
         }
     }
