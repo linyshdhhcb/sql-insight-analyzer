@@ -7,29 +7,31 @@ import java.nio.charset.StandardCharsets;
  * @Date: 2025/5/10
  * @ClassName: LiteKVString
  * @Version: 1.0
- * @Description: 字符串实体类
+ * @Description: 字符串结构体
  */
 public class LiteKVString extends LiteKVObject {
-    private static final int MAX_SHORT_STR_LEN = 12;
+    private static final int MAX_SHORT_LEN = 12;
     private Object value;
 
     public LiteKVString() {
         this.type = TYPE_STRING;
-        this.ttl = -1;
     }
 
-    public LiteKVString(String value) {
+    public LiteKVString(String val) {
         this();
-        setValue(value);
+        setValue(val);
     }
 
-    public void setValue(String value) {
-        if (value.length() <= MAX_SHORT_STR_LEN) {
-            this.value = value.getBytes(StandardCharsets.UTF_8);
-        } else if (isInteger(value)) {
-            this.value = Long.parseLong(value);
+    /**
+     * 设置值，并根据长度或是否为整数进行优化存储
+     */
+    public void setValue(String val) {
+        if (val.length() <= MAX_SHORT_LEN) {
+            this.value = val.getBytes(StandardCharsets.UTF_8);
+        } else if (isInteger(val)) {
+            this.value = Long.parseLong(val);
         } else {
-            this.value = compress(value);
+            this.value = val.getBytes(StandardCharsets.UTF_8);
         }
     }
 
@@ -37,7 +39,7 @@ public class LiteKVString extends LiteKVObject {
         if (value instanceof byte[]) {
             return new String((byte[]) value, StandardCharsets.UTF_8);
         } else if (value instanceof Long) {
-            return String.valueOf(value);
+            return value.toString();
         }
         return null;
     }
@@ -51,19 +53,15 @@ public class LiteKVString extends LiteKVObject {
         }
     }
 
-    private byte[] compress(String value) {
-        return value.getBytes(StandardCharsets.UTF_8);
-    }
-
     @Override
     public byte[] serialize() {
         if (value instanceof byte[]) {
             byte[] bytes = (byte[]) value;
-            byte[] result = new byte[bytes.length + 2];
-            result[0] = '$';
-            result[1] = (byte) bytes.length;
-            System.arraycopy(bytes, 0, result, 2, bytes.length);
-            return result;
+            byte[] res = new byte[bytes.length + 2];
+            res[0] = '$';
+            res[1] = (byte) bytes.length;
+            System.arraycopy(bytes, 0, res, 2, bytes.length);
+            return res;
         } else if (value instanceof Long) {
             return ("+int:" + value).getBytes(StandardCharsets.UTF_8);
         }
@@ -72,17 +70,20 @@ public class LiteKVString extends LiteKVObject {
 
     @Override
     public void deserialize(byte[] data) {
-        if (data.length > 0 && data[0] == '$') {
+        if (data.length > 1 && data[0] == '$') {
             int len = data[1];
-            byte[] strBytes = new byte[len];
-            System.arraycopy(data, 2, strBytes, 0, len);
-            this.value = strBytes;
+            byte[] b = new byte[len];
+            System.arraycopy(data, 2, b, 0, len);
+            this.value = b;
         } else {
             this.value = new String(data, StandardCharsets.UTF_8);
         }
     }
 
-    public void setTtl(long expireMs) {
-        this.ttl = System.currentTimeMillis() + expireMs;
+    /**
+     * 设置过期时间（毫秒）
+     */
+    public void setTtl(long ms) {
+        this.ttl = System.currentTimeMillis() + ms;
     }
 }

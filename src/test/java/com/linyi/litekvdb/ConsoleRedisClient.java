@@ -16,7 +16,7 @@ public class ConsoleRedisClient {
             InputStream in = socket.getInputStream();
             Scanner scanner = new Scanner(System.in)
         ) {
-            System.out.println("已连接到 LiteKV-DB，请输入命令（如 SET name \"value\"），输入 quit 退出");
+            System.out.println("已连接到 LiteKV-DB，输入 quit 退出");
 
             while (true) {
                 System.out.print("127.0.0.1> ");

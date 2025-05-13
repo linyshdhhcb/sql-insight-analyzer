@@ -1,6 +1,7 @@
 package com.linyi.litekvdb.store.storage.database;
 
 import com.linyi.litekvdb.store.storage.StringStorage;
+import com.linyi.litekvdb.store.structure.LiteKVString;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -14,16 +15,17 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class StringDatabase implements StringStorage {
 
-    private final Map<String, String> data = new ConcurrentHashMap<>();
+    private final Map<String, LiteKVString> data = new ConcurrentHashMap<>();
 
     @Override
     public void set(String key, String value) {
-        data.put(key, value);
+        data.put(key, new LiteKVString(value));
     }
 
     @Override
     public String get(String key) {
-        return data.get(key);
+        LiteKVString liteKVString = data.get(key);
+        return liteKVString != null ? liteKVString.getValue() : null;
     }
 
     @Override

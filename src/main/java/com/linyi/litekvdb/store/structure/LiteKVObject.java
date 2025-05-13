@@ -12,6 +12,7 @@ public abstract class LiteKVObject {
      * 缓存对象类型
      */
     public static final byte TYPE_STRING = 'S';
+    public static final byte TYPE_HASH = 'H';
 
 
     /**
