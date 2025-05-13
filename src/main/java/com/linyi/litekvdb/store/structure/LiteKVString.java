@@ -2,6 +2,13 @@ package com.linyi.litekvdb.store.structure;
 
 import java.nio.charset.StandardCharsets;
 
+/**
+ * @Author: linyi
+ * @Date: 2025/5/10
+ * @ClassName: LiteKVString
+ * @Version: 1.0
+ * @Description: 字符串实体类
+ */
 public class LiteKVString extends LiteKVObject {
     private static final int MAX_SHORT_STR_LEN = 12;
     private Object value;

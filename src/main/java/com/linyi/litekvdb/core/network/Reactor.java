@@ -34,14 +34,17 @@ public class Reactor {
         // 打开服务器的 SocketChannel
         ServerSocketChannel serverSocketChannel = ServerSocketChannel.open();
         serverSocketChannel.bind(new InetSocketAddress(port));
-        serverSocketChannel.configureBlocking(false);  // 非阻塞模式
-        serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);  // 注册到 selector
+        // 非阻塞模式
+        serverSocketChannel.configureBlocking(false);
+        // 注册到 selector
+        serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
 
         System.out.println("LiteKV-DB 正在启动，监听端口：" + port);
 
         // 事件循环
         while (true) {
-            selector.select();  // 阻塞，等待事件
+            // 阻塞，等待事件
+            selector.select();
             Iterator<SelectionKey> keys = selector.selectedKeys().iterator();
 
             while (keys.hasNext()) {
@@ -68,7 +71,8 @@ public class Reactor {
         ServerSocketChannel serverChannel = (ServerSocketChannel) key.channel();
         SocketChannel clientChannel = serverChannel.accept();
         clientChannel.configureBlocking(false);
-        clientChannel.register(selector, SelectionKey.OP_READ);  // 注册为可读事件
+        // 注册为可读事件
+        clientChannel.register(selector, SelectionKey.OP_READ);
     }
 
     /**
@@ -82,11 +86,13 @@ public class Reactor {
         int read = clientChannel.read(buffer);
 
         if (read == -1) {
-            clientChannel.close();  // 客户端断开连接
+            // 客户端断开连接
+            clientChannel.close();
             return;
         }
 
-        buffer.flip();  // 切换到读取模式
+        // 切换到读取模式
+        buffer.flip();
         byte[] bytes = new byte[buffer.remaining()];
         buffer.get(bytes);
         // 获取请求的字符串

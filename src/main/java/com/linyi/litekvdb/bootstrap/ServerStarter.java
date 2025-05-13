@@ -32,9 +32,10 @@ public class ServerStarter {
                 stringDb,
                 hashDb
                 /*,
-                listStorage,
-                setStorage,
-                zsetStorage*/
+                listDb,
+                setDb,
+                zsetDb
+                */
         );
         // 注入依赖
         new Reactor(executor).start(6381);
