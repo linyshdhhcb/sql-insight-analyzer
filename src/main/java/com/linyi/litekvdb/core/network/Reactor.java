@@ -2,7 +2,6 @@ package com.linyi.litekvdb.core.network;
 
 import com.linyi.litekvdb.core.command.CommandExecutor;
 import com.linyi.litekvdb.core.protocol.RespDecoder;
-import com.linyi.litekvdb.store.Database;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -10,17 +9,27 @@ import java.nio.ByteBuffer;
 import java.nio.channels.*;
 import java.util.Iterator;
 
+/**
+ * @Author: linyi
+ * @Date: 2025/5/13
+ * @ClassName: Reactor
+ * @Version: 1.0
+ * @Description: 一个基于NIO的Reactor网络模型，用于处理客户端请求
+ */
 public class Reactor {
     private final Selector selector;
     private final CommandExecutor executor;
 
-    // 构造方法，接收 CommandExecutor
     public Reactor(CommandExecutor executor) throws IOException {
         this.selector = Selector.open();
         this.executor = executor;
     }
 
-    // 启动 Reactor，监听客户端连接
+    /**
+     * 启动服务器
+     * @param port 端口号
+     * @throws IOException
+     */
     public void start(int port) throws IOException {
         // 打开服务器的 SocketChannel
         ServerSocketChannel serverSocketChannel = ServerSocketChannel.open();
@@ -50,7 +59,11 @@ public class Reactor {
         }
     }
 
-    // 接受客户端连接
+    /**
+     * 接受客户端连接
+     * @param key SelectionKey
+     * @throws IOException
+     */
     private void accept(SelectionKey key) throws IOException {
         ServerSocketChannel serverChannel = (ServerSocketChannel) key.channel();
         SocketChannel clientChannel = serverChannel.accept();
@@ -58,7 +71,11 @@ public class Reactor {
         clientChannel.register(selector, SelectionKey.OP_READ);  // 注册为可读事件
     }
 
-    // 读取客户端数据，并处理命令
+    /**
+     * 处理客户端请求
+     * @param key SelectionKey
+     * @throws IOException
+     */
     private void read(SelectionKey key) throws IOException {
         SocketChannel clientChannel = (SocketChannel) key.channel();
         ByteBuffer buffer = ByteBuffer.allocate(1024);

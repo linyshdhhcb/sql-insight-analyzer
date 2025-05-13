@@ -1,6 +1,5 @@
 package com.linyi.litekvdb.store.storage.database;
 
-import com.linyi.litekvdb.core.command.DataType;
 import com.linyi.litekvdb.store.storage.StringStorage;
 
 import java.util.Map;
@@ -11,38 +10,29 @@ import java.util.concurrent.ConcurrentHashMap;
  * @Date: 2025/5/13
  * @ClassName: StringDatabase
  * @Version: 1.0
- * @Description:
+ * @Description: 字符串操作
  */
 public class StringDatabase implements StringStorage {
 
     private final Map<String, String> data = new ConcurrentHashMap<>();
-    private final Map<String, DataType> typeMap = new ConcurrentHashMap<>();
-
-    // ---------- String 操作 ----------
 
     @Override
-    public void setString(String key, String value) {
+    public void set(String key, String value) {
         data.put(key, value);
-        typeMap.put(key, DataType.STRING);
     }
 
     @Override
-    public String getString(String key) {
-        if (typeMap.get(key) != DataType.STRING){
-            return null;
-        }
-        return (String) data.get(key);
+    public String get(String key) {
+        return data.get(key);
     }
 
     @Override
-    public Boolean delKey(String key) {
-        if (data.containsKey(key)) {
-            data.remove(key);
-            typeMap.remove(key);
-            return true;
-        }
-        return false;
+    public boolean del(String key) {
+        return data.remove(key) != null;
     }
 
-
+    @Override
+    public boolean exists(String key) {
+        return data.containsKey(key);
+    }
 }

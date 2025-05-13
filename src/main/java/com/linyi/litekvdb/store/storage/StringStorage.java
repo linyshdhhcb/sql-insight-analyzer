@@ -1,15 +1,19 @@
 package com.linyi.litekvdb.store.storage;
 
-// 通用接口（适合String）
+/**
+ * @Author: linyi
+ * @Date: 2025/5/13
+ * @ClassName: StringStorage
+ * @Version: 1.0
+ * @Description: 字符串存储接口
+ */
 public interface StringStorage {
-//    void set(String key, String value);
-//    String get(String key);
-//    boolean exists(String key);
-//    boolean delete(String key);
 
-     void setString(String key, String value);
+    void set(String key, String value);
 
-    String getString(String key);
+    String get(String key);
 
-    Boolean delKey(String key);
+    boolean del(String key);
+
+    boolean exists(String key);
 }

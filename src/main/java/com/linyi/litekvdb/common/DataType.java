@@ -1,4 +1,4 @@
-package com.linyi.litekvdb.core.command;
+package com.linyi.litekvdb.common;
 
 public enum DataType {
     /**

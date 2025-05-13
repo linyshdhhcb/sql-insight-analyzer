@@ -1,17 +1,27 @@
 package com.linyi.litekvdb.core.command;
 
+import com.linyi.litekvdb.common.DataType;
 import com.linyi.litekvdb.core.handler.CommandHandler;
 import com.linyi.litekvdb.core.handler.HashHandler;
 import com.linyi.litekvdb.core.handler.StringHandler;
-import com.linyi.litekvdb.store.Database;
+import com.linyi.litekvdb.store.storage.HashStorage;
+import com.linyi.litekvdb.store.storage.StringStorage;
 
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @Author: linyi
+ * @Date: 2025/5/13
+ * @ClassName: CommandExecutor
+ * @Version: 1.0
+ * @Description: 命令路由执行器
+ */
 public class CommandExecutor {
 
     private final Map<DataType, CommandHandler> handlerMap = new HashMap<>();
-    public CommandExecutor(Database stringDb, Database hashDb/*, Database listDb, Database setDb, Database zsetDb*/) {
+
+    public CommandExecutor(StringStorage stringDb, HashStorage hashDb/*, Database listDb, Database setDb, Database zsetDb*/) {
         handlerMap.put(DataType.STRING, new StringHandler(stringDb));
         handlerMap.put(DataType.HASH, new HashHandler(hashDb));
 //        handlerMap.put(DataType.LIST, new ListHandler(listDb));

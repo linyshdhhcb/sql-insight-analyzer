@@ -1,5 +1,12 @@
 package com.linyi.litekvdb.core.protocol;
 
+/**
+ * @Author: linyi
+ * @Date: 2025/5/13
+ * @ClassName: RespDecoder
+ * @Version: 1.0
+ * @Description: RESP 解码器
+ */
 public class RespDecoder {
     public static String[] decode(String input) {
         if (input == null || input.isEmpty() || !input.startsWith("*")) {
