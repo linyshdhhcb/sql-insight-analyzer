@@ -5,6 +5,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.linyi.litekvdb.common.Constant.TYPE_HASH;
+
 /**
  * @Author: linyi
  * @Date: 2025/5/13

@@ -2,6 +2,8 @@ package com.linyi.litekvdb.store.structure;
 
 import java.nio.charset.StandardCharsets;
 
+import static com.linyi.litekvdb.common.Constant.TYPE_STRING;
+
 /**
  * @Author: linyi
  * @Date: 2025/5/10
@@ -10,16 +12,25 @@ import java.nio.charset.StandardCharsets;
  * @Description: 字符串结构体
  */
 public class LiteKVString extends LiteKVObject {
+
+    // 字符串最大长度
     private static final int MAX_SHORT_LEN = 12;
+
+    // 值
     private Object value;
 
     public LiteKVString() {
         this.type = TYPE_STRING;
     }
 
-    public LiteKVString(String val) {
+    public LiteKVString(String value) {
         this();
-        setValue(val);
+        setValue(value);
+    }
+
+    public LiteKVString(String value, String ttl){
+        this();
+        setValue(value,ttl);
     }
 
     /**
@@ -27,7 +38,10 @@ public class LiteKVString extends LiteKVObject {
      */
     public void setValue(String val) {
         if (val.length() <= MAX_SHORT_LEN) {
+            //  短字符串
             this.value = val.getBytes(StandardCharsets.UTF_8);
+            this.type = TYPE_STRING;
+            this.ttl = -1;
         } else if (isInteger(val)) {
             this.value = Long.parseLong(val);
         } else {
@@ -35,7 +49,28 @@ public class LiteKVString extends LiteKVObject {
         }
     }
 
+    /**
+     * 设置值，并根据长度或是否为整数进行优化存储
+     * @param val 值
+     * @param ttl 过期时间
+     */
+    public void setValue(String val, String ttl) {
+        if (val.length() <= MAX_SHORT_LEN) {
+            //  短字符串
+            this.value = val.getBytes(StandardCharsets.UTF_8);
+            this.type = TYPE_STRING;
+            this.ttl = Long.parseLong(ttl)*1000;
+        } else if (isInteger(val)) {
+            this.value = Long.parseLong(val)*1000;
+        } else{
+            this.value = val.getBytes(StandardCharsets.UTF_8);
+        }
+    }
+
     public String getValue() {
+        if (isExpired()){
+            return null;
+        }
         if (value instanceof byte[]) {
             return new String((byte[]) value, StandardCharsets.UTF_8);
         } else if (value instanceof Long) {

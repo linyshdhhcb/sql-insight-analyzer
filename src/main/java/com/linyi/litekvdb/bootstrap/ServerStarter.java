@@ -4,8 +4,11 @@ import com.linyi.litekvdb.core.command.CommandExecutor;
 import com.linyi.litekvdb.core.network.Reactor;
 import com.linyi.litekvdb.store.storage.database.HashDatabase;
 import com.linyi.litekvdb.store.storage.database.StringDatabase;
+import com.linyi.litekvdb.store.structure.LiteKVString;
 
 import java.io.IOException;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @Author: linyi
@@ -17,8 +20,9 @@ import java.io.IOException;
 public class ServerStarter {
     public static void main(String[] args) throws IOException {
         System.out.println("LiteKV-DB 正在启动...");
+
         // 全局唯一String存储
-        StringDatabase stringDb = new StringDatabase();
+        StringDatabase stringDb =StringDatabase.getInstance();
       // 全局唯一Hash存储
         HashDatabase hashDb = new HashDatabase();
 //        // 全局唯一List存储

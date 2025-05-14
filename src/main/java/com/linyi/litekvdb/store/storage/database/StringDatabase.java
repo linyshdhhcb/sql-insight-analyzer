@@ -15,26 +15,38 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class StringDatabase implements StringStorage {
 
-    private final Map<String, LiteKVString> data = new ConcurrentHashMap<>();
+    // 单例实例
+    private static final StringDatabase INSTANCE = new StringDatabase();
+
+    // 私有构造器，防止外部 new
+    private StringDatabase() {}
+
+    // 获取单例实例的方法
+    public static StringDatabase getInstance() {
+        return INSTANCE;
+    }
+
+    // 原始的 Map 存储
+    private static final Map<String, LiteKVString> stringData = new ConcurrentHashMap<>();
 
     @Override
     public void set(String key, String value) {
-        data.put(key, new LiteKVString(value));
+        stringData.put(key, new LiteKVString(value));
     }
 
     @Override
     public String get(String key) {
-        LiteKVString liteKVString = data.get(key);
+        LiteKVString liteKVString = stringData.get(key);
         return liteKVString != null ? liteKVString.getValue() : null;
     }
 
     @Override
     public boolean del(String key) {
-        return data.remove(key) != null;
+        return stringData.remove(key) != null;
     }
 
     @Override
     public boolean exists(String key) {
-        return data.containsKey(key);
+        return stringData.containsKey(key);
     }
 }
