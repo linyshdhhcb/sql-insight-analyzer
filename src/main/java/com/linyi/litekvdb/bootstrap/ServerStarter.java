@@ -24,7 +24,7 @@ public class ServerStarter {
         // 全局唯一String存储
         StringDatabase stringDb =StringDatabase.getInstance();
       // 全局唯一Hash存储
-        HashDatabase hashDb = new HashDatabase();
+        HashDatabase hashDb = HashDatabase.getInstance();
 //        // 全局唯一List存储
 //        Database listStorage = new Database();
 //        // 全局唯一Set存储

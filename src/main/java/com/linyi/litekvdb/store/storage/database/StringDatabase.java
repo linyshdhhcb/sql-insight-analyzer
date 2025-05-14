@@ -15,19 +15,28 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class StringDatabase implements StringStorage {
 
-    // 单例实例
+    /**
+     * 字符串数据存储
+     */
+    private static final Map<String, LiteKVString> stringData = new ConcurrentHashMap<>();
+
+
+    /**
+     * 单例实例
+     */
     private static final StringDatabase INSTANCE = new StringDatabase();
 
-    // 私有构造器，防止外部 new
+
     private StringDatabase() {}
 
-    // 获取单例实例的方法
+    /**
+     * 获取单例实例
+     * @return
+     */
     public static StringDatabase getInstance() {
         return INSTANCE;
     }
 
-    // 原始的 Map 存储
-    private static final Map<String, LiteKVString> stringData = new ConcurrentHashMap<>();
 
     @Override
     public void set(String key, String value) {

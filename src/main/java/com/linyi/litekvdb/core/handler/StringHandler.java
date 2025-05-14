@@ -46,7 +46,7 @@ public class StringHandler implements CommandHandler {
             return "-ERR wrong number of arguments for 'SET'\r\n";
         }
         storage.set(key, args[2]);
-        return "+OK\r\n";
+        return "$OK\r\n";
     }
 
     /**
