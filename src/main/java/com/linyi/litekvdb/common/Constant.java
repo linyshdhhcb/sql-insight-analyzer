@@ -17,4 +17,15 @@ public class Constant {
      */
     public static final byte TYPE_STRING = 'S';
     public static final byte TYPE_HASH = 'H';
+
+    /**
+     * String命令
+     */
+    public static final String SET = "SET";
+
+    public static final String GET = "GET";
+
+    public static final String DEL = "DEL";
+
+    public static final String EXISTS = "EXISTS";
 }

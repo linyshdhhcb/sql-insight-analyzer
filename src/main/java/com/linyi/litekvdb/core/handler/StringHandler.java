@@ -2,6 +2,8 @@ package com.linyi.litekvdb.core.handler;
 
 import com.linyi.litekvdb.store.storage.StringStorage;
 
+import static com.linyi.litekvdb.common.Constant.*;
+
 /**
  * @Author: linyi
  * @Date: 2025/5/13
@@ -20,13 +22,13 @@ public class StringHandler implements CommandHandler {
     @Override
     public String executeCommand(String command, String key, String... args) {
         switch (command.toUpperCase()) {
-            case "SET":
+            case SET:
                 return set(key, args);
-            case "GET":
+            case GET:
                 return get(key);
-            case "DEL":
+            case DEL:
                 return del(key);
-            case "EXISTS":
+            case EXISTS:
                 return exists(key);
             default:
                 return "-ERR unknown command '" + command + "'\r\n";
