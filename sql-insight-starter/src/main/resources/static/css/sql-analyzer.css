@@ -1,0 +1,37 @@
+body {
+    padding: 16px;
+}
+
+pre {
+    white-space: pre-wrap;
+}
+
+/* 按钮组样式优化 */
+.btn-group-custom {
+    display: inline-flex;
+    gap: 8px;
+}
+
+#refreshBtn,
+#exportBtn {
+    min-width: 100px;
+}
+
+#refreshBtn span,
+#exportBtn span {
+    margin-right: 4px;
+}
+
+/* 导出下拉菜单样式 */
+.dropdown-menu {
+    min-width: 150px;
+}
+
+.dropdown-item {
+    cursor: pointer;
+}
+
+.dropdown-item:hover {
+    background-color: #f8f9fa;
+}
+

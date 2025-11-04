@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.linyi.sql.insight.starter.SqlAnalysisAutoConfiguration,\
+  com.linyi.sql.insight.starter.MybatisPlusSqlInsightConfiguration
