@@ -1,0 +1,24 @@
+server:
+  port: 8088
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/test?useSSL=false&serverTimezone=UTC
+    username: root
+    password: abc123
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  sql:
+    init:
+      mode: always
+
+sql:
+  analysis:
+    enabled: true
+    sampling-rate: 1.0
+    ui-enabled: true
+    # 可选：按需开启/设置规则加载
+    rule-loader: FILE
+    rule-file: classpath:sql-analysis-rules.properties
+    allow-sql-types: [ SELECT, UPDATE, DELETE ]
+    deny-sql-types: [ ]
+    whitelist-sql-id-contains: [ ]
+    blacklist-sql-id-contains: [ ]
