@@ -1,17 +1,138 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+         http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.linyi.litekvdb</groupId>
-    <artifactId>LiteKV-DB</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <!-- 基本信息 -->
+    <groupId>com.linyi.sql</groupId>
+    <artifactId>sql-insight</artifactId>
+    <version>1.0.0</version>
+    <packaging>pom</packaging>
+    <name>SQL Insight Analyzer</name>
+    <description>MyBatis SQL Performance Analyzer with EXPLAIN, Scoring and Dynamic Replace</description>
+    <url>https://github.com/linyshdhhcb/sql-insight</url>
 
+    <!-- 模块聚合 -->
+    <modules>
+        <module>sql-insight-core</module>
+        <module>sql-insight-starter</module>
+        <module>sql-analysis-demo-mybatis</module>
+        <module>sql-analysis-demo-mybatisplus</module>
+    </modules>
+
+    <!-- 属性：统一版本管理 -->
     <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
+        <java.version>8</java.version>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <!-- 依赖版本 -->
+        <spring-boot.version>2.7.18</spring-boot.version>
+        <mybatis.version>3.5.13</mybatis.version>
+        <mybatis-plus.version>3.5.5</mybatis-plus.version>
+        <mysql-connector.version>8.0.33</mysql-connector.version>
+        <thymeleaf.version>3.0.15.RELEASE</thymeleaf.version>
+        <micrometer.version>1.15.4</micrometer.version>
+        <gson.version>2.10.1</gson.version>
+        <mvel2.version>2.4.14.Final</mvel2.version>
     </properties>
 
+    <!-- 依赖管理：统一版本，子模块按需引入 -->
+    <dependencyManagement>
+        <dependencies>
+            <!-- Spring Boot BOM -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!-- 核心库 -->
+            <dependency>
+                <groupId>org.mybatis</groupId>
+                <artifactId>mybatis</artifactId>
+                <version>${mybatis.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-core</artifactId>
+                <version>${mybatis-plus.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>${mysql-connector.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.code.gson</groupId>
+                <artifactId>gson</artifactId>
+                <version>${gson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mvel</groupId>
+                <artifactId>mvel2</artifactId>
+                <version>${mvel2.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.micrometer</groupId>
+                <artifactId>micrometer-core</artifactId>
+                <version>${micrometer.version}</version>
+            </dependency>
+
+            <!-- Thymeleaf（仅 starter 可选） -->
+            <dependency>
+                <groupId>org.thymeleaf</groupId>
+                <artifactId>thymeleaf-spring5</artifactId>
+                <version>${thymeleaf.version}</version>
+            </dependency>
+        </dependencies>
+
+    </dependencyManagement>
+
+    <!-- 插件管理 -->
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.11.0</version>
+                    <configuration>
+                        <source>${java.version}</source>
+                        <target>${java.version}</target>
+                        <encoding>UTF-8</encoding>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>3.2.5</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+    <!-- 开源许可-->
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>https://opensource.org/licenses/MIT</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <!-- SCM & 开发者 -->
+    <developers>
+        <developer>
+            <name>Lin Yi</name>
+            <email>jingshuihuayue@qq.com</email>
+            <organization>linyi</organization>
+        </developer>
+    </developers>
 </project>
